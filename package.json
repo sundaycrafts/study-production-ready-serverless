@@ -10,5 +10,9 @@
   "license": "ISC",
   "dependencies": {
     "bluebird": "^3.5.4"
+  },
+  "devDependencies": {
+    "aws-sdk": "^2.452.0",
+    "serverless-pseudo-parameters": "^2.4.0"
   }
 }
