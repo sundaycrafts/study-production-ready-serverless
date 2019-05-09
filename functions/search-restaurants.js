@@ -6,10 +6,12 @@ const dynamodb = new AWS.DynamoDB.DocumentClient()
 const defaultResults = process.env.defaultResults || 8
 const tableName = process.env.restaurants_table
 
-const getRestaurants = async (count) => {
+const findRestaurantsByTheme = async (theme, count) => {
   const req = {
     TableName: tableName,
-    Limit: count
+    Limit: count,
+    FilterExpression: "contains(themes, :theme)",
+    ExpressionAttributeValues: { ":theme": theme}
   }
 
   const resp = await dynamodb.scan(req).promise()
@@ -17,7 +19,8 @@ const getRestaurants = async (count) => {
 }
 
 module.exports.handler = async (event) => {
-  const restaurants = await getRestaurants(defaultResults)
+  const {theme} = JSON.parse(event.body)
+  const restaurants = await findRestaurantsByTheme(theme, defaultResults)
 
   return {
     statusCode: 200,
