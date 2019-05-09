@@ -5,6 +5,8 @@ const fs = promisifyAll(require('fs'))
 const path = require('path')
 const Mustache = require('mustache')
 const axios = require('axios')
+const aws4 = require('aws4')
+const URL = require('url')
 
 const restaurantsApiRoot = process.env.restaurants_api
 const days = ['Sunday', 'Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday', 'Saturday']
@@ -20,7 +22,24 @@ const loadHtml = async () => {
 }
 
 const getRestaurants = async () => {
-  const {data} = await axios.get(restaurantsApiRoot)
+  const {hostname, pathname} = URL.parse(restaurantsApiRoot)
+  let opts = {
+    host: hostname,
+    path: pathname
+  }
+
+  aws4.sign(opts)
+
+  const {data} = await axios({
+    method: 'get',
+    url: restaurantsApiRoot,
+    headers: {
+      'Host': opts.headers['Host'],
+      'X-Amz-Date': opts.headers['X-Amz-Date'],
+      'Authorization': opts.headers['Authorization'],
+      'X-Amz-Security-Token': opts.headers['X-Amz-Security-Token']
+    }
+  })
   return data
 }
 
