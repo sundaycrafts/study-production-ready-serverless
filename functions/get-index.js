@@ -27,22 +27,23 @@ const loadHtml = async () => {
 
 const getRestaurants = async () => {
   const {hostname, pathname} = URL.parse(restaurantsApiRoot)
+
   let opts = {
     host: hostname,
     path: pathname
   }
 
+  /* aws4 assumes AWS credentials are available in process.env
+    https://github.com/mhart/aws4/blob/master/aws4.js#L282-L289 */
   aws4.sign(opts)
 
-  const {data} = await axios({
+  /* Be sure you run axios in node environment when testing
+    https://github.com/axios/axios/issues/1754#issuecomment-435784235 */
+  const client = axios.create({timeout: 2000})
+  const {data} = await client({
     method: 'get',
     url: restaurantsApiRoot,
-    headers: {
-      'Host': opts.headers['Host'],
-      'X-Amz-Date': opts.headers['X-Amz-Date'],
-      'Authorization': opts.headers['Authorization'],
-      'X-Amz-Security-Token': opts.headers['X-Amz-Security-Token']
-    }
+    headers: opts.headers
   })
   return data
 }
