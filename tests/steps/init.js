@@ -1,12 +1,11 @@
 'use strict';
-const env = require('dotenv')
+
 const {promisifyAll} = require('bluebird')
 const awscred = promisifyAll(require('awscred'))
 
 let initialized = false
 module.exports = async () => {
   if (initialized) return
-  env.config()
 
   /*** 
    * # Why does awscred need?

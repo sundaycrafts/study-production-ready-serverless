@@ -1,5 +1,6 @@
 'use strict';
 
+require('dotenv').config()
 const when = require('../steps/when')
 const init = require('../steps/init')
 const cheerio = require('cheerio')
