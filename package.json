@@ -17,6 +17,7 @@
   "devDependencies": {
     "aws-sdk": "^2.452.0",
     "awscred": "^1.4.2",
+    "chance": "^1.0.18",
     "cheerio": "^1.0.0-rc.3",
     "dotenv": "^8.0.0",
     "jest": "^24.8.0",

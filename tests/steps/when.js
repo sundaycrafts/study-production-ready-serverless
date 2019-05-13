@@ -23,17 +23,26 @@ const respondFrom = ({data, status, headers}) => ({
   headers
 })
 
-const viaHttp = async (relPath, method, opts) => {
+const viaHttp = async (relPath, method, opts = {}) => {
   const url = `${TEST_ROOT}/${relPath}`;
-  const data = get(opts, 'body')
-  const useIam = get(opts, 'iam_auth', false)
+  const useIam = opts.iam_auth || false
+  const {body: data, idToken} = opts
+
+  const signHeaders = generateSignHeaders(url)
+
+  let headers
+  if (idToken) {
+    headers = {...signHeaders, 'Authorization': idToken}
+  } else if (useIam) {
+    headers = signHeaders
+  }
 
   const client = axios.create({
     timeout: 2000,
     method,
     url,
     data,
-    headers: useIam && generateSignHeaders(url)
+    headers
   })
 
   // eslint-disable-next-line no-console
@@ -73,8 +82,8 @@ exports.we_invoke_get_index = () => TEST_MODE === 'handler' ?
 exports.we_invoke_get_restaurants = () => TEST_MODE === 'handler' ?
   viaHandler({}, 'get-restaurants') : viaHttp('restaurants', 'get', { iam_auth: true })
 
-exports.we_invoke_search_restaurants = theme => {
+exports.we_invoke_search_restaurants = (idToken, theme) => {
   const body = JSON.stringify({theme})
   return TEST_MODE === 'handler' ?
-    viaHandler({body}, 'search-restaurants') : viaHttp('restaurants/search', 'post', {body})
+    viaHandler({body}, 'search-restaurants') : viaHttp('restaurants/search', 'post', {body, idToken})
 }

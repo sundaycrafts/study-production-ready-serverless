@@ -2,20 +2,31 @@
 
 require('dotenv').config()
 const when = require('../steps/when')
-const init = require('../steps/init')
+const given = require('../steps/given')
+const tearDown = require('../steps/tearDown')
 
-describe("When we invoke the POST /restaurants/search endpoint with theme 'cartoon'", () => {
-  beforeAll(init)
+describe("Given an authenticated user", () => {
+  let user
+  beforeAll(async () => {
+    /** It doesn't need init step because
+     * this function is authorized by cognito user
+     * instead of IAM (init step retrieve IAM token).
+     */
+    user = await given.an_authenticated_user()
+  })
+  afterAll(() => tearDown.an_authenticated_user(user.username))
 
-  it('Should return an array of 4 restaurants', async () => {
-    const {statusCode, body} = await when.we_invoke_search_restaurants('cartoon')
+  describe("When we invoke the POST /restaurants/search endpoint with theme 'cartoon'", () => {
+    it('Should return an array of 4 restaurants', async () => {
+      const {statusCode, body} = await when.we_invoke_search_restaurants(user.idToken, 'cartoon')
 
-    expect(statusCode).toEqual(200)
-    expect(body).toHaveLength(4)
+      expect(statusCode).toEqual(200)
+      expect(body).toHaveLength(4)
 
-    body.forEach(restaurant => {
-      expect(restaurant).toHaveProperty('name')
-      expect(restaurant).toHaveProperty('image')
+      body.forEach(restaurant => {
+        expect(restaurant).toHaveProperty('name')
+        expect(restaurant).toHaveProperty('image')
+      })
     })
   })
 })
