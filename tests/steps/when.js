@@ -7,13 +7,18 @@ const axios = require('axios')
 const aws4 = require('aws4')
 const {TEST_MODE, TEST_ROOT} = process.env;
 
-const generateSignHeaders = url => {
+const setAwsAccessKeyId = require('../../helpers/setAwsAccessKeyIds')
+
+const generateSignHeaders = async (url, iam_auth) => {
   const {hostname, pathname} = URL.parse(url)
   let opts = {
     host: hostname, 
     path: pathname
   };
+
+  if (iam_auth) await setAwsAccessKeyId()
   aws4.sign(opts)
+
   return opts.headers
 }
 
@@ -25,15 +30,15 @@ const respondFrom = ({data, status, headers}) => ({
 
 const viaHttp = async (relPath, method, opts = {}) => {
   const url = `${TEST_ROOT}/${relPath}`;
-  const useIam = opts.iam_auth || false
+  const iam_auth = opts.iam_auth || false
   const {body: data, idToken} = opts
 
-  const signHeaders = generateSignHeaders(url)
+  const signHeaders = await generateSignHeaders(url, iam_auth)
 
   let headers
   if (idToken) {
     headers = {...signHeaders, 'Authorization': idToken}
-  } else if (useIam) {
+  } else if (iam_auth) {
     headers = signHeaders
   }
 

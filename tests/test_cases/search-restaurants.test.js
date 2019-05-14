@@ -8,10 +8,6 @@ const tearDown = require('../steps/tearDown')
 describe("Given an authenticated user", () => {
   let user
   beforeAll(async () => {
-    /** It doesn't need init step because
-     * this function is authorized by cognito user
-     * instead of IAM (init step retrieve IAM token).
-     */
     user = await given.an_authenticated_user()
   })
   afterAll(() => tearDown.an_authenticated_user(user.username))
