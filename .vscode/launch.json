@@ -25,8 +25,20 @@
     {
       "type": "node",
       "request": "launch",
-      "name": "Launch Program",
-      "program": "${workspaceFolder}/handler.js"
-    }
+      "name": "search-restaurants",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/node_modules/.bin/sls",
+      "args": [
+        "invoke",
+        "local",
+        "-f",
+        "search-restaurants",
+        "-p",
+        "${workspaceFolder}/examples/search-restaurants.json"
+      ],
+      "envFile": "${workspaceFolder}/.env"
+    },
   ]
 }
