@@ -22,6 +22,7 @@
     "dotenv": "^8.0.0",
     "jest": "^24.8.0",
     "lodash": "^4.17.11",
+    "serverless": "^1.42.3",
     "serverless-pseudo-parameters": "^2.4.0"
   }
 }
