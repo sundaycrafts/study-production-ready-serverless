@@ -1,7 +1,7 @@
 'use strict';
 
 require('dotenv').config()
-const when = require('../steps/when')
+const when = require('./steps/when')
 
 describe('When we invoke the GET /restaurants endpoint', () => {
   it('Should return an array of 8 restaurants', async () => {

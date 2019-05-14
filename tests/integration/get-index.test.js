@@ -1,7 +1,7 @@
 'use strict';
 
 require('dotenv').config()
-const when = require('../steps/when')
+const when = require('./steps/when')
 const cheerio = require('cheerio')
 
 describe('When we invoke the GET / endpoint', () => {

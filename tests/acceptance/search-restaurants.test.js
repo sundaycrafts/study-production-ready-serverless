@@ -1,9 +1,9 @@
 'use strict';
 
 require('dotenv').config()
-const when = require('../steps/when')
-const given = require('../steps/given')
-const tearDown = require('../steps/tearDown')
+const when = require('./steps/when')
+const given = require('./steps/given')
+const tearDown = require('./steps/tearDown')
 
 describe("Given an authenticated user", () => {
   let user

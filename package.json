@@ -4,6 +4,7 @@
   "description": "",
   "main": "handler.js",
   "scripts": {
+    "test": "npm run test:integration && npm run test:acceptance",
     "test:integration": "jest --verbose ./tests/integration",
     "test:acceptance": "jest --verbose ./tests/acceptance"
   },
