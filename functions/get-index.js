@@ -8,6 +8,8 @@ const axios = require('axios')
 const aws4 = require('aws4')
 const URL = require('url')
 
+const setAwsAccessKeyId = require('../helpers/setAwsAccessKeyIds')
+
 const awsRegion = process.env.AWS_REGION
 const cognitoUserPoolId = process.env.cognito_user_pool_id
 const cognitoClientId = process.env.cognito_client_id
@@ -32,6 +34,8 @@ const getRestaurants = async () => {
     host: hostname,
     path: pathname
   }
+
+  await setAwsAccessKeyId()
 
   /* aws4 assumes AWS credentials are available in process.env
     https://github.com/mhart/aws4/blob/master/aws4.js#L282-L289 */

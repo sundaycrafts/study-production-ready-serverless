@@ -40,5 +40,23 @@
       ],
       "envFile": "${workspaceFolder}/.env"
     },
+    {
+      "type": "node",
+      "request": "launch",
+      "name": "get-index",
+      "cwd": "${workspaceFolder}",
+      "console": "integratedTerminal",
+      "internalConsoleOptions": "neverOpen",
+      "program": "${workspaceFolder}/node_modules/.bin/sls",
+      "args": [
+        "invoke",
+        "local",
+        "-f",
+        "get-index",
+        "-d",
+        "{}"
+      ],
+      "envFile": "${workspaceFolder}/.env"
+    },
   ]
 }
